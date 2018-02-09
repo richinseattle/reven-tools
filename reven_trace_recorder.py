@@ -183,3 +183,5 @@ except:
     print "ERROR: could not launch trace recording, check license status"
 
 sys.exit(0)
+
+
