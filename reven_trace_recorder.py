@@ -7,6 +7,30 @@ Reven Trace Recorder
 @richinseattle
 
 This script will create and record a scenario in reven and then generate a trace
+
+Example:
+$ python reven_trace_recorder.py 
+Reven Trace Recorder
+
+Connecting to reven server at 192.168.4.2:8080
+Connected as user: trng1
+
+Creating project: trace_createprocess.exe_1518174466.17
+
+Uploading target binary: trace_createprocess.exe
+
+Creating scenario configuration:
+     target vm: tr1_win7_32b
+  command line: trace_createprocess.exe whoami.exe
+
+Recording scenario for project trace_createprocess.exe_1518174466.17
+. . . . . . . . . . . . done
+
+Initializing trace recording over scenario..
+. . .
+Trace is recording on the server.
+This will take a while. Exiting..
+
 '''
 
 print "Reven Trace Recorder"
@@ -152,3 +176,5 @@ except:
     print "ERROR: could not launch trace recording, check license status"
 
 sys.exit(0)
+
+
