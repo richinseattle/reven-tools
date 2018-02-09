@@ -9,18 +9,21 @@ Reven Trace Recorder
 This script will create and record a scenario in reven and then generate a trace
 
 Example:
+
+$ export REVEN_TARGET_BINARY="trace_createprocess.exe"
+$ export REVEN_TARGET_BINARY_ARGS="whoami.exe"
 $ python reven_trace_recorder.py 
 Reven Trace Recorder
 
-Connecting to reven server at 192.168.4.2:8080
-Connected as user: trng1
+Connecting to reven server at 127.0.0.1:8080
+Connected as user: reven
 
 Creating project: trace_createprocess.exe_1518174466.17
 
 Uploading target binary: trace_createprocess.exe
 
 Creating scenario configuration:
-     target vm: tr1_win7_32b
+     target vm: win7_x86
   command line: trace_createprocess.exe whoami.exe
 
 Recording scenario for project trace_createprocess.exe_1518174466.17
