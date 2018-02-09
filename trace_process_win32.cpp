@@ -1,4 +1,4 @@
-// Simple harness for activating a reven trace on a Win32 program
+// Simple harness for tracing a Win32 program from CreateProcess under Reven 
 // @richinseattle
 
 
@@ -36,7 +36,7 @@ bool run_target(char *cmdline)
 
     if(!CreateProcess( 
         NULL,           // No module name (use command line)
-        argv[1],        // Command line
+        cmdline,        // Command line
         NULL,           // Process handle not inheritable
         NULL,           // Thread handle not inheritable
         FALSE,          // Set handle inheritance to FALSE
@@ -57,14 +57,14 @@ int main(int argc, char **argv)
 {
     if(argc < 2)
     {
-        printf("Usage: %s <cmdline> [skip caching]\n", argv[0]);
+        printf("Usage: %s [cmdline]\n", argv[0]);
         return 0;
     }
 
     // run target once without tracing to get it into memory
     // this is done to reduce amount of work recorded in trace
     // NOTE: pass an extra argument to skip this step
-    if(argv < 3 && !run_target(argv[1])) return 1;
+    if(argc < 3 && !run_target(argv[1])) return 1;
 
     // run target again under reven trace
     start_vm();
