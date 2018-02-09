@@ -10,23 +10,25 @@ This script will create and record a scenario in reven and then generate a trace
 
 Example:
 
-$ export REVEN_TARGET_BINARY="trace_createprocess.exe"
-$ export REVEN_TARGET_BINARY_ARGS="whoami.exe"
-$ python reven_trace_recorder.py 
+$ export REVEN_TARGET_BINARY="trace_createprocess.exe;hello.exe"
+$ export REVEN_TARGET_BINARY_ARGS="hello.exe"
+$ python reven_record_trace.py 
 Reven Trace Recorder
 
-Connecting to reven server at 127.0.0.1:8080
-Connected as user: reven
+Connecting to reven server at 192.168.4.2:8080
+Connected as user: trng1
 
-Creating project: trace_createprocess.exe_1518174466.17
+Creating project: trace_createprocess.exe_1518175972.57
 
-Uploading target binary: trace_createprocess.exe
+Uploading binary: trace_createprocess.exe
+Uploading binary: hello.exe
 
 Creating scenario configuration:
-     target vm: win7_x86
-  command line: trace_createprocess.exe whoami.exe
+     target vm: tr1_win7_32b
+  command line: trace_createprocess.exe hello.exe
 
-Recording scenario for project trace_createprocess.exe_1518174466.17
+Recording scenario for project trace_createprocess.exe_1518175972.57
+
 . . . . . . . . . . . . done
 
 Initializing trace recording over scenario..
@@ -57,7 +59,9 @@ if reven_user == None:
 
 # If not specified, this will create an interactive scenario 
 # and will not automatically record a trace
-reven_target_binary = os.getenv('REVEN_TARGET_BINARY')
+# Multiple binaries can be passed using ';' as a separator
+# first binary will be launched automatically
+reven_target_binary = os.getenv('REVEN_TARGET_BINARY').split(';')[0]
 if reven_target_binary == None:
     reven_target_binary = ""
 
@@ -109,10 +113,10 @@ rec_launch_conf.is_interactive = False
 if reven_target_binary == "":
     rec_launch_conf.is_interactive = True
 else:
-    print "Uploading target binary: %s" % (reven_target_binary)
+    for bin in os.getenv('REVEN_TARGET_BINARY').split(';'):
+        print "Uploading binary: %s" % (bin)
+        reven_connection.project_upload_file(project_id, bin)
     print
-    reven_connection.project_upload_file(project_id, reven_target_binary)
-
 
 print "Creating scenario configuration:"
 print "     target vm: %s" % reven_project_vm
@@ -169,7 +173,7 @@ for i in range(0, timeout):
         sys.stdout.flush()
 
 try:
-    reven_project.start_execution()
+    reven_project.start_execution([reven.InspectorMemoryHistory(), reven.InspectorStringHistory()])
  
     print
     print "Trace is recording on the server."
@@ -179,5 +183,3 @@ except:
     print "ERROR: could not launch trace recording, check license status"
 
 sys.exit(0)
-
-
